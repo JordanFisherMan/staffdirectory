@@ -7,15 +7,24 @@
   margin: 0 auto; }
 
 .staff-member {
-  display: flex; }
+  display: flex;
+  padding: 10px 0; }
   .staff-member__primary {
-    width: 20%; }
+    width: 20%;
+    padding-right: 15px; }
   .staff-member__secondary {
     width: 80%; }
+  .staff-member__photo {
+    width: 100%; }
+  .staff-member__name {
+    margin-top: 0; }
 
 .staff-search {
   display: flex;
   justify-content: center; }
+
+.index__staff-search {
+  margin-bottom: 40px; }
 
 .page-title {
   text-align: center; }

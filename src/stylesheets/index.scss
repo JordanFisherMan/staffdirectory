@@ -2,6 +2,13 @@
 @import "components/staff_member";
 @import "components/staff_search";
 
+.index{
+
+  &__staff-search{
+    margin-bottom: 40px;
+  }
+}
+
 .page-title{
   text-align: center;
 }
