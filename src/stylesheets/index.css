@@ -1,0 +1,23 @@
+* {
+  box-sizing: border-box; }
+
+.container {
+  max-width: 1140px;
+  padding: 0 15px;
+  margin: 0 auto; }
+
+.staff-member {
+  display: flex; }
+  .staff-member__primary {
+    width: 20%; }
+  .staff-member__secondary {
+    width: 80%; }
+
+.staff-search {
+  display: flex;
+  justify-content: center; }
+
+.page-title {
+  text-align: center; }
+
+/*# sourceMappingURL=index.css.map */

@@ -1,0 +1,11 @@
+.staff-member{
+  display: flex;
+
+  &__primary{
+    width: 20%;
+  }
+
+  &__secondary{
+    width: 80%;
+  }
+}
