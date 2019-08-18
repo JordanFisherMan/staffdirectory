@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="/staffdirectory/src/stylesheets/index.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="/staffdirectory/src/javascript/main.js"></script>
   <title>Staff Directory</title>
 </head>
 <body>
@@ -17,10 +19,8 @@ $password = "root";
 $conn = new mysqli($servername, $username, $password);
 
 // Create database
-$sql = "CREATE DATABASE staff";
-if ($conn->query($sql) === TRUE) {
-    echo "Database created successfully";
-} else {
+$sql = "CREATE DATABASE IF NOT EXISTS staff";
+if ($conn->query($sql) === FALSE){
     echo "Error creating database: " . $conn->error;
 }
 
@@ -28,6 +28,12 @@ $database = "staff";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $database);
+
+$sql = "DROP TABLE IF EXISTS staff;";
+
+if ($conn->query($sql) === FALSE){
+    echo "Error deleting table: " . $conn->error;
+}
 
 // sql to create table
 $sql = "CREATE TABLE staff (
@@ -37,47 +43,60 @@ department VARCHAR(100),
 description TEXT(1000)
 )";
 
-if ($conn->query($sql) === TRUE) {
-    echo "Table staff created successfully";
-} else {
+if ($conn->query($sql) === FALSE){
     echo "Error creating table: " . $conn->error;
 }
 
+$sql = "INSERT INTO staff (name, photo_path, department, description)
+VALUES ('John Doe','/staffdirectory/src/images/photo.jpg','Computer Science','Description about John');";
+if ($conn->query($sql) === FALSE) {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+}
+$sql = "INSERT INTO staff (name, photo_path, department, description)
+VALUES ('Paul Potts','/staffdirectory/src/images/photo.jpg','Opera','Description about Paul');";
+if ($conn->query($sql) === FALSE) {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+}
+$sql = "INSERT INTO staff (name, photo_path, department, description)
+VALUES ('Bob Smith','/staffdirectory/src/images/photo.jpg','Social Studies','Description about Bob');";
+if ($conn->query($sql) === FALSE) {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+}
+
 ?>
+
   <div class="container">
     <h1 class="page-title">Staff Directory</h1>
-    <div class="staff-search">
-      <input type="text" name="" value="" placeholder="Keywords...">
-      <select class="" name="">
-        <option value="department">Department</option>
-      </select>
-    </div>
-    <div class="staff-member">
-      <div class="staff-member__primary">
-        <img src="" alt="" class="staff-member__photo">
-      </div>
-      <div class="staff-member__secondary">
-        <h2 class="staff-member__name">member name</h2>
-        <h2 class="staff-member__department">department</h2>
-        <p class="staff-member__description">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
+    <div class="index__staff-search">
+      <div class="staff-search">
+        <input id="js-search" type="text" name="search" value="" placeholder="Keywords...">
+        <select id="js-field-select" class="" name="">
+          <option value="department">Department</option>
+          <option value="name">Name</option>
+        </select>
       </div>
     </div>
-    <hr>
-    <div class="staff-member">
-      <div class="staff-member__primary">
-        <img src="" alt="" class="staff-member__photo">
+    <?php
+    $sql = "SELECT * FROM staff";
+    $result = $conn->query($sql);
+
+    // output data of each row
+    while($row = $result->fetch_assoc()) { ?>
+      <div class="staff-member">
+        <div class="staff-member__primary">
+          <img src="<?php echo $row["photo_path"] ?>" alt="" class="staff-member__photo">
+        </div>
+        <div class="staff-member__secondary">
+          <h2 class="staff-member__name"><?php echo $row["name"] ?></h2>
+          <h2 class="staff-member__department"><?php echo $row["department"] ?></h2>
+          <p class="staff-member__description">
+            <?php echo $row["description"] ?>
+          </p>
+        </div>
       </div>
-      <div class="staff-member__secondary">
-        <h2 class="staff-member__name">member name</h2>
-        <h2 class="staff-member__department">department</h2>
-        <p class="staff-member__description">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-      </div>
-    </div>
-    <hr>
+      <hr>
+    <?php } ?>
+
   </div>
 </body>
 </html>
