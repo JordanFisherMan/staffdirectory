@@ -1,20 +1,23 @@
 <?php
+$servername = "localhost";
+$username = "root";
+$password = "root";
+$database = "staff";
 
+// Create connection
+$conn = new mysqli($servername, $username, $password, $database);
 //get the q parameter from URL
-$q=$_GET['search'];
+$q = $_GET['search'];
+$field = $_GET['field'];
 
-$sql = "SELECT * FROM staff where name LIKE '%$q%';";
+$sql = "SELECT * FROM staff where $field LIKE '%$q%';";
 
 $result = $conn->query($sql);
 
-echo $result;
-
-// if ($result === FALSE){
-//     echo "Error deleting table: " . $conn->error;
-// } else {
-//   //output the response
-//   echo $result;
-// }
-
+$rows = array();
+while($r = mysqli_fetch_assoc($result)) {
+    $rows[] = $r;
+}
+echo json_encode($rows);
 
 ?>

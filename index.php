@@ -63,6 +63,25 @@ if ($conn->query($sql) === FALSE) {
     echo "Error: " . $sql . "<br>" . $conn->error;
 }
 
+$csv = array_map('str_getcsv', file(__DIR__ . "/DeveloperTestData.csv"));
+
+for ($i = 3; $i <= count($csv); $i += 4) {
+  $name = $csv[$i] . " " . $csv[$i+1];
+  $department = $csv[$i+2];
+  $description = $csv[$i+3];
+  $sql = "INSERT INTO staff (name, photo_path, department, description)
+  VALUES
+  ('$name',
+    '/staffdirectory/src/images/photo.jpg',
+    '$department',
+    '$description');";
+  if ($conn->query($sql) === TRUE) {
+      echo "New record created successfully";
+  } else {
+      echo "Error: " . $sql . "<br>" . $conn->error;
+  }
+}
+
 ?>
 
   <div class="container">
@@ -71,32 +90,33 @@ if ($conn->query($sql) === FALSE) {
       <div class="staff-search">
         <input id="js-search" type="text" name="search" value="" placeholder="Keywords...">
         <select id="js-field-select" class="" name="">
-          <option value="department">Department</option>
           <option value="name">Name</option>
+          <option value="department">Department</option>
         </select>
       </div>
     </div>
-    <?php
-    $sql = "SELECT * FROM staff";
-    $result = $conn->query($sql);
+    <div id="js-staff-members">
+      <?php
+      $sql = "SELECT * FROM staff";
+      $result = $conn->query($sql);
 
-    // output data of each row
-    while($row = $result->fetch_assoc()) { ?>
-      <div class="staff-member">
-        <div class="staff-member__primary">
-          <img src="<?php echo $row["photo_path"] ?>" alt="" class="staff-member__photo">
+      // output data of each row
+      while($row = $result->fetch_assoc()) { ?>
+        <div class="staff-member">
+          <div class="staff-member__primary">
+            <img src="<?php echo $row["photo_path"] ?>" alt="" class="staff-member__photo">
+          </div>
+          <div class="staff-member__secondary">
+            <h2 class="staff-member__name"><?php echo $row["name"] ?></h2>
+            <h2 class="staff-member__department"><?php echo $row["department"] ?></h2>
+            <p class="staff-member__description">
+              <?php echo $row["description"] ?>
+            </p>
+          </div>
         </div>
-        <div class="staff-member__secondary">
-          <h2 class="staff-member__name"><?php echo $row["name"] ?></h2>
-          <h2 class="staff-member__department"><?php echo $row["department"] ?></h2>
-          <p class="staff-member__description">
-            <?php echo $row["description"] ?>
-          </p>
-        </div>
-      </div>
-      <hr>
-    <?php } ?>
-
+        <hr>
+      <?php } ?>
+    </div>
   </div>
 </body>
 </html>
